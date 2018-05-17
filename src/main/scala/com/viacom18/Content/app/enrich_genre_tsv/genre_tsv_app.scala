@@ -1,4 +1,5 @@
 package com.viacom18.Content.app.enrich_genre_tsv
+
 import org.apache.spark.sql.{SQLContext, SparkSession}
 
 object genre_tsv_app {
@@ -53,7 +54,7 @@ object genre_tsv_app {
     val end_time = sqlcontext.sql(s""" select CURRENT_TIMESTAMP """).take(1)(0).get(0).toString
     val min = sqlcontext.sql(s"""SELECT (unix_timestamp('$end_time') - unix_timestamp('$st_time'))/3600""").take(1)(0).get(0).toString.toDouble.toInt.toString
 
-    sqlcontext.sql(s"""insert into DataTableloadHistory select CURRENT_DATE ,'$date_zero' ,'F_AGG_GENRE_TSV' ,'$Load_type','APP', '$count','$st_time','$end_time','$min'  from  DataTableloadHistory  limit 1""")
+    sqlcontext.sql(s"""insert into DataTableloadHistory partition(date_stamp) select CURRENT_DATE ,'$date_zero' ,'F_AGG_GENRE_TSV' ,'$Load_type','APP', '$count','$st_time','$end_time','$min','yes','content','$date_zero' as date_stamp  from  DataTableloadHistory  limit 1""")
 
 
     println("Job finished sucessfully ", date_zero)

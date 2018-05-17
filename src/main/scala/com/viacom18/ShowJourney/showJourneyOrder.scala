@@ -3,6 +3,7 @@ import org.apache.spark.sql.{SQLContext, SparkSession}
 import org.apache.spark.sql.functions._
 import java.time.LocalDate
 import scala.math.Ordering.Implicits._
+import scala.util.control.NonFatal
 object showJourneyOrder {
   val spark = SparkSession.builder().appName("showjourneyapp").enableHiveSupport().getOrCreate()
 

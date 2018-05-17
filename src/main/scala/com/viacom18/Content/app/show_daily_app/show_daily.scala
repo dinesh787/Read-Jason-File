@@ -1,15 +1,16 @@
 package com.viacom18.Content.app.show_daily_app
-  import org.apache.spark.sql.{SQLContext, SparkSession}
 
-  object show_daily {
+import org.apache.spark.sql.{SQLContext, SparkSession}
+
+object show_daily {
 
   val spark = SparkSession
     .builder()
     .appName("showdailyapp")
     .enableHiveSupport()
-//    .config("fs.wasbs.impl", "org.apache.hadoop.fs.azure.NativeAzureFileSystem")
-//    .config("fs.AbstractFileSystem.wasb.impl", "org.apache.hadoop.fs.azure.Wasb")
-//    .config("fs.azure.account.key.v18biblobstorprod.blob.core.windows.net", "K1ZcztvuFkq6Hy4P8Uf13kP3yXgXxQJBs/bKZ6Y4cfgzD/9nmjHg9uMwIbAe3ZC7vmCS59Mk/3iloAVOs3zdYQ==")
+    //    .config("fs.wasbs.impl", "org.apache.hadoop.fs.azure.NativeAzureFileSystem")
+    //    .config("fs.AbstractFileSystem.wasb.impl", "org.apache.hadoop.fs.azure.Wasb")
+    //    .config("fs.azure.account.key.v18biblobstorprod.blob.core.windows.net", "K1ZcztvuFkq6Hy4P8Uf13kP3yXgXxQJBs/bKZ6Y4cfgzD/9nmjHg9uMwIbAe3ZC7vmCS59Mk/3iloAVOs3zdYQ==")
     .getOrCreate()
 
   val sqlcontext: SQLContext = spark.sqlContext
@@ -138,7 +139,7 @@ package com.viacom18.Content.app.show_daily_app
     val end_time = sqlcontext.sql(s""" select CURRENT_TIMESTAMP """).take(1)(0).get(0).toString
     val min = sqlcontext.sql(s"""SELECT (unix_timestamp('$end_time') - unix_timestamp('$st_time'))/3600""").take(1)(0).get(0).toString.toDouble.toInt.toString
 
-    sqlcontext.sql(s"""insert into DataTableloadHistory select CURRENT_DATE ,'$date_zero' ,'F_Agg_Show_Dly' ,'$Load_type','APP', '$count','$st_time','$end_time','$min'  from  DataTableloadHistory  limit 1""")
+    sqlcontext.sql(s"""insert into DataTableloadHistory partition(date_stamp) select CURRENT_DATE ,'$date_zero' ,'F_Agg_Show_Dly' ,'$Load_type','APP', '$count','$st_time','$end_time','$min','yes','content','$date_zero' as date_stamp  from  DataTableloadHistory  limit 1""")
 
 
   }

@@ -1,14 +1,15 @@
 package com.viacom18.Executive.dwhload
 
+
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.{SQLContext, SparkSession}
 import org.apache.spark.sql.functions.col
-object   youbora_api {
+object youbora_api {
 
-  val sparks = SparkSession.builder().appName("youboraplay").enableHiveSupport().getOrCreate()
+  val spark = SparkSession.builder().appName("youboraplay").enableHiveSupport().getOrCreate()
   // val conf = new SparkConf().setAppName("Simple Application")
   //  val sc = new SparkContext(conf)
-  val sqlcontext: SQLContext = sparks.sqlContext
+  val sqlcontext: SQLContext = spark.sqlContext
 
   def main(args: Array[String]) {
 
@@ -18,6 +19,7 @@ object   youbora_api {
   }
   def FetchData(date_zero: String) = {
 
+    val st_time = spark.sql(s""" select CURRENT_TIMESTAMP """).take(1)(0).get(0).toString
 
     println("youbora play for date = ", date_zero)
     val date_next = sqlcontext.sql(s""" select date_add('$date_zero',1)""").take(1)(0).get(0).toString
@@ -34,7 +36,7 @@ object   youbora_api {
     println(finalurl)
     println("started accessing")
     val result1 = scala.io.Source.fromURL(finalurl).mkString
-    val events =  sparks.sparkContext.parallelize( result1:: Nil)
+    val events =  spark.sparkContext.parallelize( result1:: Nil)
     val df = sqlcontext.read.json(events)
 
     val data = df.withColumn("data", explode(col("data")))
@@ -65,7 +67,20 @@ object   youbora_api {
       sqlcontext.sql(s"""insert into table f_agg_youbora_web_wt partition(date_part_col)  select '$date_zero','PWA','$pwa',cast('$date_zero' as string) as   date_part_col from  f_agg_youbora_web_wt limit 1 """)
       sqlcontext.sql(s"""insert into table f_agg_youbora_web_wt partition(date_part_col)  select '$date_zero','web','$web',cast('$date_zero' as string) as   date_part_col from  f_agg_youbora_web_wt limit 1 """)
     }
+    val count = val1.count.toInt
+    val end_time = spark.sql(s""" select CURRENT_TIMESTAMP """).take(1)(0).get(0).toString
+    val min = spark.sql(s"""SELECT (unix_timestamp('$end_time') - unix_timestamp('$st_time'))/3600""").take(1)(0).get(0).toString.toDouble.toInt.toString
+
+    spark.sql(s"""insert into default.datatableloadhistory partition(date_stamp) select CURRENT_DATE ,CURRENT_DATE ,'YOUBORA' ,'Daily','YOUBORA', '$count','$st_time','$end_time','$min','yes','YOUBORA','$date_zero' as date_stamp  from DataTableloadHistory limit 1""")
+
+
+
+
+
   }
+
+
+
 
   def md5Hash(text: String) : String = java.security.MessageDigest.getInstance("MD5").digest(text.getBytes()).map(0xFF & _).map { "%02x".format(_) }.foldLeft(""){_ + _}
 

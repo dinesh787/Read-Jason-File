@@ -1,5 +1,6 @@
 package com.viacom18.Executive.web
 
+
 import org.apache.spark.sql.{SQLContext, SparkSession}
 
 object grain_web {
@@ -8,9 +9,6 @@ object grain_web {
     .builder()
     .appName("grainweb")
     .enableHiveSupport()
-//    .config("fs.wasbs.impl", "org.apache.hadoop.fs.azure.NativeAzureFileSystem")
-//    .config("fs.AbstractFileSystem.wasb.impl", "org.apache.hadoop.fs.azure.Wasb")
-//    .config("fs.azure.account.key.v18biblobstorprod.blob.core.windows.net", "K1ZcztvuFkq6Hy4P8Uf13kP3yXgXxQJBs/bKZ6Y4cfgzD/9nmjHg9uMwIbAe3ZC7vmCS59Mk/3iloAVOs3zdYQ==")
     .getOrCreate()
 
   val sqlcontext: SQLContext = spark.sqlContext
@@ -19,7 +17,7 @@ object grain_web {
 
     val date_zero = args(0)
     val Load_type = args(1)
-    println("funnel start date ", date_zero)
+    println("Grain Web date ", date_zero)
     grain_web(date_zero,Load_type)
 
   }
@@ -58,15 +56,14 @@ object grain_web {
     GRAINWEB.createOrReplaceTempView("GRAINWEB")
 
     sqlcontext.sql(s"insert into F_AGG_PRODUCT_DLY_DAY_GRAIN_BOTH partition(date_part_col,project_part_col) select 'Web' AS PROJECT,date_stamp AS DATE,PLATFORM AS PLATFORM,'NA' AS MANUFACTURER,'NA' AS PRICE_BAND,'NA' AS APP_VER_PK_NPK_FLAG,ORGANIC_INORGANIC_INSTALL_FLAG AS ORGANIC_INORGANIC_INSTALL_FLAG,NEW_REPEAT_FLAG AS NEW_REPEAT_FLAG,REG_USER_FLAG AS REG_USER_FLAG,CASE WHEN DURATION_BUCKET IS NULL THEN 'OTHERS' ELSE DURATION_BUCKET END AS DURATION_BUCKET,FREQUENCY_BUCKET,MONTHLY_POWER_USER,DAILY_POWER_USER,DAILY_POWER_USER_FLAG,COUNT(WEB_VISITORS) AS NUM_VISITORS,COUNT(WEB_VIEWERS) AS NUM_VIEWERS,0 AS NUM_INSTALLS,0 AS NUM_VISITORS_FUNNEL,SUM( CASE WHEN (CAST(WEB_VISITORS AS BIGINT) >=1 AND CAST(WEB_VIEWERS AS BIGINT) >= 1) THEN 1 ELSE 0 END) AS NUM_VIEWERS_FUNNEL,COUNT(CASE WHEN (CAST(WEB_VISITORS AS BIGINT) >=1 AND CAST(WEB_VIEWERS AS BIGINT) >= 1 AND CAST(VIDEO_WATCHED AS BIGINT) >=1 AND (CAST(duration_watched_ms AS BIGINT)/60000) > 30 ) THEN distinct_id END) AS NUM_POWER_VIEWERS_FUNNEL,SUM(CAST(COUNT_PLAIN_VIEWS AS BIGINT)) AS NUM_VIEWS,SUM(CASE WHEN (CAST(WEB_VISITORS AS BIGINT) >=1 AND CAST(WEB_VIEWERS AS BIGINT) >= 1) THEN CAST(COUNT_PLAIN_VIEWS AS BIGINT) ELSE 0 END) AS NUM_VIEWS_FUNNEL,SUM(CAST(DURATION_WATCHED_MS AS BIGINT))/1000 AS DURATION_WATCHED_SECS,SUM(CASE WHEN (CAST(WEB_VISITORS AS BIGINT) >=1 AND CAST(WEB_VIEWERS AS BIGINT) >= 1 AND CAST(VIDEO_WATCHED AS BIGINT) >=1 ) THEN CAST(DURATION_WATCHED_MS AS BIGINT)/1000 ELSE 0 END) AS DURATION_WATCHED_SECS_FUNNEL,COUNT(DISTINCT DISTINCT_ID) AS POWER_USERS, DATE_STAMP as date_part_col,'WEB' as project_part_col from GRAINWEB where DATE_STAMP = '$date_zero' GROUP BY date_stamp,PLATFORM,ORGANIC_INORGANIC_INSTALL_FLAG,NEW_REPEAT_FLAG,REG_USER_FLAG,DURATION_BUCKET,FREQUENCY_BUCKET,MONTHLY_POWER_USER,DAILY_POWER_USER,DAILY_POWER_USER_FLAG")
-
+    println("inserted into table F_AGG_PRODUCT_DLY_DAY_GRAIN_BOTH")
 
     val end_time = sqlcontext.sql(s""" select CURRENT_TIMESTAMP """).take(1)(0).get(0).toString
     val count = sqlcontext.sql(s""" select count(*) from  F_AGG_PRODUCT_DLY_DAY_GRAIN_BOTH where date_part_col ='$date_zero' and project_part_col ='WEB'""").take(1)(0).get(0).toString
     val min = sqlcontext.sql(s"""SELECT (unix_timestamp('$end_time') - unix_timestamp('$st_time'))/3600""").take(1)(0).get(0).toString.toDouble.toInt.toString
 
-    sqlcontext.sql(s"""insert into DataTableloadHistory select CURRENT_DATE ,'$date_zero' ,'F_Agg_Show_Dly' ,'$Load_type','WEB', '$count','$st_time','$end_time','$min'  from  DataTableloadHistory  limit 1""")
-
-
+    sqlcontext.sql(s"""insert into default.DataTableloadHistory partition(date_stamp) select CURRENT_DATE ,'$date_zero' ,'Executive_WEB' ,'$Load_type','WEB', '$count','$st_time','$end_time','$min', 'yes', 'grain_web','$date_zero' as date_stamp from DataTableloadHistory  limit 1""")
+    println("inserted into table default.DataTableloadHistory")
 
 
   }

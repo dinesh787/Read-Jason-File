@@ -12,33 +12,33 @@ import scala.util.control.NonFatal
 object MonthlyLoading {
 
   def main(args: Array[String]) {
-    try{
+
     val spark = SparkSession.builder.appName("CMSMonthlyLoading").enableHiveSupport().getOrCreate()
 
-    /*..
-/* ...
+
+    try{
     val cmonth = args(0)
     val cyear = args(1)
     val pmonth = args(2)
     val pyear = args(3)
     val startDate = args(4).toString()
-    val endDate = args(5).toString() */
-
+    val endDate = args(5).toString()
+/* ...
     val cmonth = "05"
     val cyear = "2018"
     val pmonth = "04"
     val pyear = "2017"
     val startDate = "2018-05-01"
-    val endDate ="2018-05-13"
+    val endDate ="2018-05-13"     */
 
     // Table loading for monthly views, watchtime and viewers media_id
-    //..spark.sql(s""" ALTER TABLE CMS_MONTHLY SET TBLPROPERTIES('EXTERNAL'='FALSE') """)
+    spark.sql(s""" ALTER TABLE CMS_MONTHLY SET TBLPROPERTIES('EXTERNAL'='FALSE') """)
 
     spark.sql(s""" ALTER TABLE CMS_MONTHLY DROP IF EXISTS PARTITION (year = '$cyear', month = '$cmonth') """)
 
     spark.sql(s""" ALTER TABLE CMS_MONTHLY DROP IF EXISTS PARTITION (year = '$pyear', month = '$pmonth') """)
 
-    //..spark.sql(s""" ALTER TABLE CMS_MONTHLY SET TBLPROPERTIES('EXTERNAL'='TRUE') """)
+    spark.sql(s""" ALTER TABLE CMS_MONTHLY SET TBLPROPERTIES('EXTERNAL'='TRUE') """)
 
     val viewAppDF = spark.sqlContext.sql(s""" SELECT 'APP' PROJECT, SUBSTRING(CAST(DATE_STAMP AS STRING),1,7) MONTH_NAME, V.MEDIA_ID, UPPER(M.REF_SERIES_TITLE) SHOW, COUNT(DISTINCT(CASE WHEN V.EVENT = ('mediaReady') THEN V.DISTINCT_ID ELSE '' END)) NUM_VIEWERS, SUM(CASE WHEN V.EVENT = 'mediaReady' THEN 1 ELSE 0 END) AS NUM_VIEWS, SUM(CASE WHEN V.EVENT = 'Video Watched' AND (CAST (V.DURATION_SECONDS AS BIGINT) BETWEEN 0 AND 36000) THEN ABS(CAST(V.DURATION_SECONDS AS BIGINT)) ELSE 0 END)/60 CONTENT_DURATION_SEC FROM VOOT_APP_BASE_EVENT V LEFT JOIN CONTENT_MAPPER M ON V.MEDIA_ID = M.ID WHERE V.EVENT IN ('mediaReady', 'Video Watched') AND V.DATE_STAMP >= '$startDate' AND V.DATE_STAMP <= '$endDate' GROUP BY SUBSTRING(CAST(V.DATE_STAMP AS STRING),1,7), V.MEDIA_ID, UPPER(M.REF_SERIES_TITLE) """)
 
@@ -56,13 +56,13 @@ object MonthlyLoading {
     //viewFinalDF.write.mode("overwrite").saveAsTable("CMS_MONTHLY")
 
     // Table loading for monthly viewers show
-     //.. spark.sql(s""" ALTER TABLE CMS_VIEWERS_MONTHLY SET TBLPROPERTIES('EXTERNAL'='FALSE') """)
+     spark.sql(s""" ALTER TABLE CMS_VIEWERS_MONTHLY SET TBLPROPERTIES('EXTERNAL'='FALSE') """)
 
     spark.sql(s""" ALTER TABLE CMS_VIEWERS_MONTHLY DROP IF EXISTS PARTITION (year = '$cyear', month = '$cmonth') """)
 
     spark.sql(s""" ALTER TABLE CMS_VIEWERS_MONTHLY DROP IF EXISTS PARTITION (year = '$pyear', month = '$pmonth') """)
 
-   //.. spark.sql(s""" ALTER TABLE CMS_VIEWERS_MONTHLY SET TBLPROPERTIES('EXTERNAL'='TRUE') """)
+   spark.sql(s""" ALTER TABLE CMS_VIEWERS_MONTHLY SET TBLPROPERTIES('EXTERNAL'='TRUE') """)
 
     val mainAppDF = spark.sqlContext.sql(s""" SELECT 'APP' PROJECT, SUBSTRING(CAST(DATE_STAMP AS STRING),1,7) MONTH_NAME, UPPER(M.REF_SERIES_TITLE) SHOW, M.SBU, M.GENRE, M.LANGUAGE, S.SBU_NEW CLUSTER, COUNT(DISTINCT(CASE WHEN V.EVENT = ('mediaReady') THEN V.DISTINCT_ID ELSE '' END)) NUM_VIEWERS FROM VOOT_APP_BASE_EVENT V LEFT JOIN CONTENT_MAPPER M ON V.MEDIA_ID = M.ID LEFT JOIN ADSALES_SBU_MAPPER S ON S.SBU= M.SBU WHERE V.DATE_STAMP >= '$startDate' AND V.DATE_STAMP <= '$endDate' AND EVENT = ('mediaReady') GROUP BY SUBSTRING(CAST(DATE_STAMP AS STRING),1,7), UPPER(M.REF_SERIES_TITLE), M.SBU, M.GENRE, M.LANGUAGE, S.SBU_NEW """)
 
@@ -107,7 +107,7 @@ object MonthlyLoading {
     println("Load CMS_VIEWERS_MONTHLY_SIDETOTAL over ")
 
 
-    */
+
 
 
     // Table loading for sidetotal monthly viewers media_id

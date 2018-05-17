@@ -1,4 +1,5 @@
-package com.viacom18.Both
+package com.viacom18.Content.Both
+
 import org.apache.spark.sql.{SQLContext, SparkSession}
 
 object Load_External {
@@ -42,4 +43,4 @@ object Load_External {
 
   }
 
-  }
+}
