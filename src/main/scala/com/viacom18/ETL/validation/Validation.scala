@@ -9,7 +9,7 @@ object Validation {
   val sqlcontext: SQLContext = spark.sqlContext
   def main(args: Array[String])
   {
-    
+
     doValidation(args(0), args(1),args(2))
   }
 
