@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="0ffd2d0b-b36a-4493-9c7d-74860954584d" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/com/viacom18/CMS/MonthlyViewersMediaID.scala" afterPath="$PROJECT_DIR$/src/main/scala/com/viacom18/CMS/MonthlyViewersMediaID.scala" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -75,11 +76,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MonthlyViewersShow.scala" pinned="false" current-in-tab="true">
+      <file leaf-file-name="MonthlyViewersShow.scala" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/scala/com/viacom18/CMS/MonthlyViewersShow.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="204">
-              <caret line="14" column="13" lean-forward="true" selection-start-line="14" selection-start-column="13" selection-end-line="14" selection-end-column="13" />
+            <state relative-caret-position="153">
+              <caret line="29" column="315" lean-forward="true" selection-start-line="29" selection-start-column="237" selection-end-line="29" selection-end-column="315" />
               <folding />
             </state>
           </provider>
@@ -105,11 +106,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MonthlyViewersMediaID.scala" pinned="false" current-in-tab="false">
+      <file leaf-file-name="MonthlyViewersMediaID.scala" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/scala/com/viacom18/CMS/MonthlyViewersMediaID.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="51">
-              <caret line="6" column="7" lean-forward="false" selection-start-line="6" selection-start-column="7" selection-end-line="6" selection-end-column="7" />
+            <state relative-caret-position="357">
+              <caret line="59" column="1" lean-forward="true" selection-start-line="59" selection-start-column="1" selection-end-line="59" selection-end-column="1" />
               <folding />
             </state>
           </provider>
@@ -173,7 +174,6 @@
         <option value="$PROJECT_DIR$/src/main/scala/com/viacom18/CMS/MonthlyLoading.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/com/viacom18/CMS/MonthlyWatchTime.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/com/viacom18/CMS/MonthlyViews.scala" />
-        <option value="$PROJECT_DIR$/src/main/scala/com/viacom18/CMS/MonthlyViewersMediaID.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/com/viacom18/CMS/DailyWatchTime.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/com/viacom18/CMS/DailyViews.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/com/viacom18/CMS/DailyViewersShow.scala" />
@@ -206,6 +206,7 @@
         <option value="$PROJECT_DIR$/src/main/scala/com/viacom18/ETL/mobile/VootMobileDataETL.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/com/viacom18/CMS/MonthlyViewersShow.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/com/viacom18/ETL/validation/Validation.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/com/viacom18/CMS/MonthlyViewersMediaID.scala" />
       </list>
     </option>
   </component>
@@ -290,15 +291,6 @@
               <item name="scala" type="462c0819:PsiDirectoryNode" />
               <item name="viacom18" type="462c0819:PsiDirectoryNode" />
               <item name="CMS" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Project-Pi-LTI" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Project-Pi-LTI" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="scala" type="462c0819:PsiDirectoryNode" />
-              <item name="viacom18" type="462c0819:PsiDirectoryNode" />
-              <item name="ETL" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -459,7 +451,14 @@
       <option name="project" value="LOCAL" />
       <updated>1526672726835</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="CMS - monthly show file updaated -Show Dup">
+      <created>1526672737038</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1526672737038</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -945,14 +944,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/com/viacom18/CMS/MonthlyViewersMediaID.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="6" column="7" lean-forward="false" selection-start-line="6" selection-start-column="7" selection-end-line="6" selection-end-column="7" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/scala/com/viacom18/ETL/validation/Validation.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="68">
@@ -963,8 +954,16 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/scala/com/viacom18/CMS/MonthlyViewersShow.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="14" column="13" lean-forward="true" selection-start-line="14" selection-start-column="13" selection-end-line="14" selection-end-column="13" />
+        <state relative-caret-position="153">
+          <caret line="29" column="315" lean-forward="true" selection-start-line="29" selection-start-column="237" selection-end-line="29" selection-end-column="315" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/com/viacom18/CMS/MonthlyViewersMediaID.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="357">
+          <caret line="59" column="1" lean-forward="true" selection-start-line="59" selection-start-column="1" selection-end-line="59" selection-end-column="1" />
           <folding />
         </state>
       </provider>
