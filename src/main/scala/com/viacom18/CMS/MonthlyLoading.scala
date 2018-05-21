@@ -15,7 +15,6 @@ object MonthlyLoading {
 
     val spark = SparkSession.builder.appName("CMSMonthlyLoading").enableHiveSupport().getOrCreate()
 
-
     try{
     val cmonth = args(0)
     val cyear = args(1)
@@ -28,8 +27,8 @@ object MonthlyLoading {
     val cyear = "2018"
     val pmonth = "04"
     val pyear = "2017"
-    val startDate = "2018-05-01"
-    val endDate ="2018-05-13"     */
+    val startDate = "2018-05-01" current month
+    val endDate ="2018-05-13"   current month  */
 
     // Table loading for monthly views, watchtime and viewers media_id
     spark.sql(s""" ALTER TABLE CMS_MONTHLY SET TBLPROPERTIES('EXTERNAL'='FALSE') """)
@@ -49,7 +48,6 @@ object MonthlyLoading {
     viewFinalDF.createOrReplaceTempView("CMS_MONTHLY_TEMP")
 
     spark.sql(s""" INSERT INTO TABLE CMS_MONTHLY PARTITION(year = '$cyear', month = '$cmonth') SELECT * FROM CMS_MONTHLY_TEMP """)
-
 
     println("Load CMS_MONTHLY over ")
 
@@ -90,7 +88,7 @@ object MonthlyLoading {
 
     val upperFinalDF = upperAppDF.union(upperWebDF)
 
-    upperFinalDF.write.mode("overwrite").saveAsTable("CMS_VIEWERS_MONTHLY_UPPERTOTAL")
+    upperFinalDF.write.mode("overwrite").saveAsTable("CMS_VIEWERS_MONTHLY_UPPERTOTAL1")
 
 
     println("Load CMS_VIEWERS_MONTHLY_UPPERTOTAL over ")
@@ -118,7 +116,7 @@ object MonthlyLoading {
 
     val sideFinalDF1 = sideAppDF1.union(sideWebDF1)
 
-    sideFinalDF1.write.mode("overwrite").saveAsTable("CMS_VIEWERS_MONTHLY_SIDETOTAL_MID")
+    sideFinalDF1.write.mode("overwrite").saveAsTable("CMS_VIEWERS_MONTHLY_SIDETOTAL_MID2")
 
 
     println("Load CMS_VIEWERS_MONTHLY_SIDETOTAL_MID over ")

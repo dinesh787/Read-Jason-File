@@ -16,7 +16,7 @@ try{
   inputDF1.createOrReplaceTempView("inputDF1")
   val cnt_mapper_id=spark.sql ("select upper(ref_Series_title) as ref_Series_title , count(distinct id) as id from content_mapper  group  by upper(ref_Series_title)")
   cnt_mapper_id.createOrReplaceTempView("cnt_mapper_id")
-  val inputDF2 = spark.sql("SELECT upper(st.SHOW) as SHOW, st.SBU, st.GENRE, st.LANGUAGE, st.CLUSTER, sum(cm.id) as MEDIA_ID_COUNT,SUM(st.NUM_VIEWERS) TOTAL FROM CMS_VIEWERS_MONTHLY_SIDETOTAL2 st left join cnt_mapper_id cm on upper(st.show) = upper(cm.ref_Series_title) GROUP BY upper(st.SHOW), st.SBU, st.GENRE, st.LANGUAGE, st.CLUSTER")
+  val inputDF2 = spark.sql("SELECT upper(st.SHOW) as SHOW, st.SBU, st.GENRE, st.LANGUAGE, st.CLUSTER, cast(sum(cm.id)/count(cm.id) as int) as MEDIA_ID_COUNT,SUM(st.NUM_VIEWERS) TOTAL FROM CMS_VIEWERS_MONTHLY_SIDETOTAL2 st left join cnt_mapper_id cm on upper(st.show) = upper(cm.ref_Series_title) GROUP BY upper(st.SHOW), st.SBU, st.GENRE, st.LANGUAGE, st.CLUSTER")
   inputDF2.createOrReplaceTempView("inputDF2")
 
 
