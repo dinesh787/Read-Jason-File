@@ -7,7 +7,7 @@ object MonthlyViewersShow {
 
   def main(args: Array[String]) {
 
-val file1 =args(0) //.."/cms/mviewers/1"
+ val file1 =args(0) //.."/cms/mviewers/1"
  val file2 =args(1) //.."/cms/mviewers/2"
 
 

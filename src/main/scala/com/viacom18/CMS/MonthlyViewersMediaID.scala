@@ -9,8 +9,8 @@ object MonthlyViewersMediaID {
   def main(args: Array[String]): Unit = {
 
     try{
-    val file1 ="/cms/mviewers_mid/1"
-    val file2 = "/cms/mviewers_mid/2"
+    val file1 = args(0) // "/cms/mviewers_mid/1"
+    val file2 =args(1)// "/cms/mviewers_mid/2"
     val spark = SparkSession.builder.appName("CMSMonthlyViews").enableHiveSupport().getOrCreate()
     val inputDF1 = spark.sqlContext.sql("SELECT MO.MEDIA_ID, CM.NAME AS EPISODE, upper(SHOW) as SHOW, CM.CONTENT_TYPE, CM.CONTENT_FILE_NAME, S.SBU, CM.CONTENT_DURATION, CM.TELECAST_DATE, CM.START_DATE, CM.GENRE, REGEXP_REPLACE(CM.CONTENT_SYNOPSIS, '\"', '') CONTENT_SYNOPSIS, CM.LANGUAGE, DATE_FORMAT(CONCAT(MO.MONTH_NAME,'-','01'), 'yyyy-MM') MONTH_NAME, DATEDIFF(CURRENT_DATE, DATE_FORMAT(FROM_UNIXTIME(UNIX_TIMESTAMP(CM.START_DATE, 'yyyy-MMM-dd HH:mm:ss')),'yyyy-MM-dd')) TENURE, SUM(MO.NUM_VIEWERS) VIEWERS FROM CMS_MONTHLY MO LEFT JOIN CONTENT_MAPPER CM ON MO.MEDIA_ID = CM.ID LEFT JOIN ADSALES_SBU_MAPPER S ON S.SBU= CM.SBU  GROUP BY MO.MEDIA_ID, CM.NAME, upper(SHOW), CM.CONTENT_TYPE, CM.CONTENT_FILE_NAME, MO.MONTH_NAME, S.SBU, CM.CONTENT_DURATION, CM.TELECAST_DATE, CM.START_DATE, CM.GENRE, CM.CONTENT_SYNOPSIS, CM.LANGUAGE, DATEDIFF(CURRENT_DATE, DATE_FORMAT(FROM_UNIXTIME(UNIX_TIMESTAMP(CM.START_DATE, 'yyyy-MMM-dd HH:mm:ss')),'yyyy-MM-dd'))")
     inputDF1.createOrReplaceTempView("inputDF1")
