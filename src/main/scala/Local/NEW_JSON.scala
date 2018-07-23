@@ -20,6 +20,7 @@ object NEW_JSON {
     val dfs = sqlcontext.read.json("C:/Users/indian/Desktop/json/new.json")
     //val flattened = dfs.select($"name", explode($"schools").as("schools_flat"))
     dfs.printSchema()
+    
     dfs.show()
    // flattened.show()
   }
